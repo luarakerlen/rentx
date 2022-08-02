@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accessory, BackButton, ImageSlider } from '../../components';
+import { Accessory, BackButton, Button, ImageSlider } from '../../components';
 
 import speedSvg from '../../assets/speed.svg';
 import accelerationSvg from '../../assets/acceleration.svg';
@@ -22,6 +22,7 @@ import {
 	Price,
 	About,
 	Accessories,
+	Footer,
 } from './styles';
 
 export function CarDetails() {
@@ -67,6 +68,10 @@ export function CarDetails() {
 					para quem gosta de acelerar.
 				</About>
 			</Content>
+
+			<Footer>
+				<Button title='Escolher período do aluguel' />
+			</Footer>
 		</Container>
 	);
 }
