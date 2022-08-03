@@ -1,30 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import { api } from '../../services/api';
 import Logo from '../../assets/logo.svg';
-import { Car } from '../../components';
+import { Car, Load } from '../../components';
 
 import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
+import { CarDTO } from '../../dtos/CarDTO';
 
 export function Home() {
-	const carData = {
-		brand: 'audi',
-		name: 'RS 5 Coupé',
-		rent: {
-			period: 'Ao dia',
-			price: 120,
-		},
-		thumbnail:
-			'https://www.pngarts.com/files/3/Audi-Transparent-Background-PNG.png',
-	};
+	const [cars, setCars] = useState<CarDTO[]>([] as CarDTO[]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const navigation = useNavigation<any>();
 
 	function handleCarDetails() {
-		navigation.navigate('CarDetails')
+		navigation.navigate('CarDetails');
 	}
+
+	useEffect(() => {
+		async function fetchCars() {
+			try {
+				const response = await api.get('/cars');
+				setCars(response.data);
+			} catch (error) {
+				console.log('erro fetchCars: ', error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		fetchCars();
+	}, []);
 
 	return (
 		<Container>
@@ -36,14 +45,20 @@ export function Home() {
 			<Header>
 				<HeaderContent>
 					<Logo width={RFValue(108)} height={RFValue(12)} />
-					<TotalCars>Total de 12 carros</TotalCars>
+					<TotalCars>{`Total de ${cars.length} carros`}</TotalCars>
 				</HeaderContent>
 			</Header>
-			<CarList
-				data={[1, 2, 3, 4, 5, 6, 7]}
-				keyExtractor={(item) => String(item)}
-				renderItem={({ item }) => <Car data={carData} onPress={handleCarDetails} />}
-			/>
+			{isLoading ? (
+				<Load />
+			) : (
+				<CarList
+					data={cars}
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => (
+						<Car data={item} onPress={handleCarDetails} />
+					)}
+				/>
+			)}
 		</Container>
 	);
 }
