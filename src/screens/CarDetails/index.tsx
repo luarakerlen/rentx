@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Accessory, BackButton, Button, ImageSlider } from '../../components';
 
 import speedSvg from '../../assets/speed.svg';
@@ -26,6 +27,12 @@ import {
 } from './styles';
 
 export function CarDetails() {
+	const navigation = useNavigation<any>();
+
+	function handleChangeRentalPeriod() {
+		navigation.navigate('Scheduling');
+	}
+
 	return (
 		<Container>
 			<Header>
@@ -70,7 +77,10 @@ export function CarDetails() {
 			</Content>
 
 			<Footer>
-				<Button title='Escolher período do aluguel' />
+				<Button
+					title='Escolher período do aluguel'
+					onPress={handleChangeRentalPeriod}
+				/>
 			</Footer>
 		</Container>
 	);
