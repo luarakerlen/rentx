@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from 'styled-components';
-import { BackButton, Button } from '../../components';
+import { BackButton, Button, Calendar } from '../../components';
 
 import ArrowSvg from '../../assets/arrow.svg';
 
@@ -55,7 +55,9 @@ export function Scheduling() {
 				</RentalPeriod>
 			</Header>
 
-			<Content></Content>
+			<Content>
+				<Calendar/>
+			</Content>
 
 			<Footer>
 				<Button title="Confirmar"/>
