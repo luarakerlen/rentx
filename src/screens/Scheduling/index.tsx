@@ -35,7 +35,7 @@ export function Scheduling() {
 					translucent
 					backgroundColor="transparent"
 				/>
-				<BackButton onPress={() => {}} color={theme.colors.shape} />
+				<BackButton color={theme.colors.shape} />
 				<Title>
 					Escolha uma {'\n'}
 					data de início e {'\n'}

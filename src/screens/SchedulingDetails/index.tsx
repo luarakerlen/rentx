@@ -41,7 +41,7 @@ import {
 export function SchedulingDetails() {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
-	
+
 	function handleConfirmRental() {
 		navigation.navigate('SchedulingComplete');
 	}
@@ -49,7 +49,7 @@ export function SchedulingDetails() {
 	return (
 		<Container>
 			<Header>
-				<BackButton onPress={() => {}} />
+				<BackButton />
 			</Header>
 
 			<CarImages>
@@ -117,7 +117,11 @@ export function SchedulingDetails() {
 			</Content>
 
 			<Footer>
-				<Button title='Alugar agora' color={theme.colors.success} onPress={handleConfirmRental} />
+				<Button
+					title='Alugar agora'
+					color={theme.colors.success}
+					onPress={handleConfirmRental}
+				/>
 			</Footer>
 		</Container>
 	);
