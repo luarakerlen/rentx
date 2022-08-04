@@ -4,6 +4,7 @@ import { useTheme } from 'styled-components';
 import { BackButton, Car, Load } from '../../components';
 import { CarDTO } from '../../dtos/CarDTO';
 import { api } from '../../services/api';
+import { AntDesign } from '@expo/vector-icons';
 
 import {
 	Container,
@@ -14,9 +15,14 @@ import {
 	Appointments,
 	AppointmentsTitle,
 	AppointmentsQuantity,
+	CarWrapper,
+	CarFooter,
+	CarFooterTitle,
+	CarFooterPeriod,
+	CarFooterDate,
 } from './styles';
 
-interface CarProps {
+interface AppointmentsProps {
 	id: string;
 	user_is: string;
 	car: CarDTO;
@@ -25,14 +31,14 @@ interface CarProps {
 export function MyCars() {
 	const theme = useTheme();
 
-	const [cars, setCars] = useState<CarProps[]>([]);
+	const [appointments, setAppointments] = useState<AppointmentsProps[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		async function fetchCars() {
 			try {
 				const response = await api.get(`/schedules_byuser?user_id=1`);
-				setCars(response.data);
+				setAppointments(response.data);
 			} catch (error) {
 				console.log('erro ao listar agendamentos', error);
 			} finally {
@@ -59,17 +65,33 @@ export function MyCars() {
 			<Content>
 				<Appointments>
 					<AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
-					<AppointmentsQuantity>05</AppointmentsQuantity>
+					<AppointmentsQuantity>{appointments.length}</AppointmentsQuantity>
 				</Appointments>
 
 				{isLoading ? (
 					<Load />
 				) : (
 					<FlatList
-						data={cars}
+						data={appointments}
 						keyExtractor={(item) => item.id}
 						showsVerticalScrollIndicator={false}
-						renderItem={({ item }) => <Car data={item.car} />}
+						renderItem={({ item }) => (
+							<CarWrapper>
+								<Car data={item.car} />
+								<CarFooter>
+									<CarFooterTitle>Período</CarFooterTitle>
+									<CarFooterPeriod>
+										<CarFooterDate>18/05/2022</CarFooterDate>
+										<AntDesign
+											name='arrowright'
+											color={theme.colors.title}
+											style={{ marginHorizontal: 10 }}
+										/>
+										<CarFooterDate>21/05/2022</CarFooterDate>
+									</CarFooterPeriod>
+								</CarFooter>
+							</CarWrapper>
+						)}
 					/>
 				)}
 			</Content>
