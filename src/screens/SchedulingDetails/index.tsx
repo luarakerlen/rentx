@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { CarDTO } from '../../dtos/CarDTO';
 import { getAccessoryIcon, getPlatformDate } from '../../utils';
 import { useTheme } from 'styled-components';
+import { api } from '../../services/api';
 
 import {
 	CarImages,
@@ -34,6 +35,7 @@ import {
 	RentalPriceQuota,
 	RentalPriceTotal,
 } from './styles';
+import { Alert } from 'react-native';
 
 interface RentalPeriod {
 	startFormatted: string;
@@ -56,10 +58,25 @@ export function SchedulingDetails() {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 
-	const rentalTotal = Number(dates.length * car.rent.price)
+	const rentalTotal = Number(dates.length * car.rent.price);
 
-	function handleConfirmRental() {
-		navigation.navigate('SchedulingComplete');
+	async function handleConfirmRental() {
+		const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+
+		const unavailable_dates = [
+			...schedulesByCar.data.unavailable_dates,
+			...dates,
+		];
+
+		api
+			.put(`/schedules_bycars/${car.id}`, {
+				id: car.id,
+				unavailable_dates,
+			})
+			.then(() => navigation.navigate('SchedulingComplete'))
+			.catch(() =>
+				Alert.alert('Agendamento', 'Não foi possível confirmar o agendamento.')
+			);
 	}
 
 	useEffect(() => {
@@ -133,7 +150,9 @@ export function SchedulingDetails() {
 				<RentalPrice>
 					<RentalPriceLabel>TOTAL</RentalPriceLabel>
 					<RentalPriceDetails>
-						<RentalPriceQuota>R$ {car.rent.price} x{dates.length} diárias</RentalPriceQuota>
+						<RentalPriceQuota>
+							R$ {car.rent.price} x{dates.length} diárias
+						</RentalPriceQuota>
 						<RentalPriceTotal>R$ {rentalTotal}</RentalPriceTotal>
 					</RentalPriceDetails>
 				</RentalPrice>
