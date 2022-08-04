@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { FlatList, StatusBar } from 'react-native';
+import { useTheme } from 'styled-components';
+import { BackButton, Car, Load } from '../../components';
 import { CarDTO } from '../../dtos/CarDTO';
 import { api } from '../../services/api';
 
-import { Container } from './styles';
+import {
+	Container,
+	Header,
+	Subtitle,
+	Title,
+	Content,
+	Appointments,
+	AppointmentsTitle,
+	AppointmentsQuantity,
+} from './styles';
+
+interface CarProps {
+	id: string;
+	user_is: string;
+	car: CarDTO;
+}
 
 export function MyCars() {
-	const [cars, setCars] = useState<CarDTO[]>([]);
+	const theme = useTheme();
+
+	const [cars, setCars] = useState<CarProps[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -16,12 +36,43 @@ export function MyCars() {
 			} catch (error) {
 				console.log('erro ao listar agendamentos', error);
 			} finally {
-				setIsLoading(false)
+				setIsLoading(false);
 			}
 		}
-		
+
 		fetchCars();
 	}, []);
 
-	return <Container></Container>;
+	return (
+		<Container>
+			<Header>
+				<StatusBar
+					barStyle='light-content'
+					translucent
+					backgroundColor='transparent'
+				/>
+				<BackButton color={theme.colors.shape} />
+				<Title>Seus agendamentos estão aqui.</Title>
+				<Subtitle>Conforto, segurança e praticidade.</Subtitle>
+			</Header>
+
+			<Content>
+				<Appointments>
+					<AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
+					<AppointmentsQuantity>05</AppointmentsQuantity>
+				</Appointments>
+
+				{isLoading ? (
+					<Load />
+				) : (
+					<FlatList
+						data={cars}
+						keyExtractor={(item) => item.id}
+						showsVerticalScrollIndicator={false}
+						renderItem={({ item }) => <Car data={item.car} />}
+					/>
+				)}
+			</Content>
+		</Container>
+	);
 }
