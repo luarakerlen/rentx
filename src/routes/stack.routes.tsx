@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
 	CarDetails,
 	Home,
+	MyCars,
 	Scheduling,
 	SchedulingComplete,
 	SchedulingDetails,
@@ -21,6 +22,7 @@ export function StackRoutes() {
 			<Screen name='Scheduling' component={Scheduling} />
 			<Screen name='SchedulingDetails' component={SchedulingDetails} />
 			<Screen name='SchedulingComplete' component={SchedulingComplete} />
+			<Screen name='MyCars' component={MyCars} />
 		</Navigator>
 	);
 }
