@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Accessory, BackButton, Button, ImageSlider } from '../../components';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -37,8 +37,17 @@ import {
 	RentalPriceQuota,
 	RentalPriceTotal,
 } from './styles';
+import { CarDTO } from '../../dtos/CarDTO';
+
+interface Params {
+	car: CarDTO;
+	dates: string[];
+}
 
 export function SchedulingDetails() {
+	const route = useRoute();
+	const { car, dates } = route.params as Params;
+
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 
