@@ -26,6 +26,8 @@ interface AppointmentsProps {
 	id: string;
 	user_is: string;
 	car: CarDTO;
+	start_date: string;
+	end_date: string;
 }
 
 export function MyCars() {
@@ -81,13 +83,13 @@ export function MyCars() {
 								<CarFooter>
 									<CarFooterTitle>Período</CarFooterTitle>
 									<CarFooterPeriod>
-										<CarFooterDate>18/05/2022</CarFooterDate>
+										<CarFooterDate>{item.start_date}</CarFooterDate>
 										<AntDesign
 											name='arrowright'
 											color={theme.colors.title}
 											style={{ marginHorizontal: 10 }}
 										/>
-										<CarFooterDate>21/05/2022</CarFooterDate>
+										<CarFooterDate>{item.end_date}</CarFooterDate>
 									</CarFooterPeriod>
 								</CarFooter>
 							</CarWrapper>
