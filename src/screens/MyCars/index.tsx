@@ -64,15 +64,15 @@ export function MyCars() {
 				<Subtitle>Conforto, segurança e praticidade.</Subtitle>
 			</Header>
 
-			<Content>
-				<Appointments>
-					<AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
-					<AppointmentsQuantity>{appointments.length}</AppointmentsQuantity>
-				</Appointments>
+			{isLoading ? (
+				<Load />
+			) : (
+				<Content>
+					<Appointments>
+						<AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
+						<AppointmentsQuantity>{appointments.length}</AppointmentsQuantity>
+					</Appointments>
 
-				{isLoading ? (
-					<Load />
-				) : (
 					<FlatList
 						data={appointments}
 						keyExtractor={(item) => item.id}
@@ -95,8 +95,8 @@ export function MyCars() {
 							</CarWrapper>
 						)}
 					/>
-				)}
-			</Content>
+				</Content>
+			)}
 		</Container>
 	);
 }
