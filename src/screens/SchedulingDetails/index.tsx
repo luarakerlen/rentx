@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Accessory, BackButton, Button, ImageSlider } from '../../components';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useTheme } from 'styled-components';
+import { format } from 'date-fns';
 
-import speedSvg from '../../assets/speed.svg';
-import accelerationSvg from '../../assets/acceleration.svg';
-import forceSvg from '../../assets/force.svg';
-import gasolineSvg from '../../assets/gasoline.svg';
-import exchangeSvg from '../../assets/exchange.svg';
-import peopleSvg from '../../assets/people.svg';
+import { CarDTO } from '../../dtos/CarDTO';
+import { getAccessoryIcon, getPlatformDate } from '../../utils';
+import { useTheme } from 'styled-components';
 
 import {
 	CarImages,
@@ -37,7 +34,11 @@ import {
 	RentalPriceQuota,
 	RentalPriceTotal,
 } from './styles';
-import { CarDTO } from '../../dtos/CarDTO';
+
+interface RentalPeriod {
+	startFormatted: string;
+	endFormatted: string;
+}
 
 interface Params {
 	car: CarDTO;
@@ -45,15 +46,31 @@ interface Params {
 }
 
 export function SchedulingDetails() {
+	const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
+		{} as RentalPeriod
+	);
+
 	const route = useRoute();
 	const { car, dates } = route.params as Params;
 
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 
+	const rentalTotal = Number(dates.length * car.rent.price)
+
 	function handleConfirmRental() {
 		navigation.navigate('SchedulingComplete');
 	}
+
+	useEffect(() => {
+		setRentalPeriod({
+			startFormatted: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+			endFormatted: format(
+				getPlatformDate(new Date(dates[dates.length - 1])),
+				'dd/MM/yyyy'
+			),
+		});
+	}, []);
 
 	return (
 		<Container>
@@ -62,33 +79,30 @@ export function SchedulingDetails() {
 			</Header>
 
 			<CarImages>
-				<ImageSlider
-					imagesUrl={[
-						'https://www.pngarts.com/files/3/Audi-Transparent-Background-PNG.png',
-					]}
-				/>
+				<ImageSlider imagesUrl={car.photos} />
 			</CarImages>
 
 			<Content>
 				<Details>
 					<Description>
-						<Brand>Lamburghini</Brand>
-						<Name>Huracan</Name>
+						<Brand>{car.brand}</Brand>
+						<Name>{car.name}</Name>
 					</Description>
 
 					<Rent>
-						<Period>Ao dia</Period>
-						<Price>R$ 580</Price>
+						<Period>{car.rent.period}</Period>
+						<Price>R$ {car.rent.price}</Price>
 					</Rent>
 				</Details>
 
 				<Accessories>
-					<Accessory name='380Km/h' icon={speedSvg} />
-					<Accessory name='3.2s' icon={accelerationSvg} />
-					<Accessory name='800 HP' icon={forceSvg} />
-					<Accessory name='Gasolina' icon={gasolineSvg} />
-					<Accessory name='Auto' icon={exchangeSvg} />
-					<Accessory name='2 pessoas' icon={peopleSvg} />
+					{car.accessories.map((accessory) => (
+						<Accessory
+							key={accessory.type}
+							name={accessory.name}
+							icon={getAccessoryIcon(accessory.type)}
+						/>
+					))}
 				</Accessories>
 
 				<RentalPeriod>
@@ -101,7 +115,7 @@ export function SchedulingDetails() {
 					</CalendarIcon>
 					<DateInfo>
 						<DateTitle>DE</DateTitle>
-						<DateValue>18/06/2021</DateValue>
+						<DateValue>{rentalPeriod.startFormatted}</DateValue>
 					</DateInfo>
 
 					<Feather
@@ -111,16 +125,16 @@ export function SchedulingDetails() {
 					/>
 
 					<DateInfo>
-						<DateTitle>DE</DateTitle>
-						<DateValue>18/06/2021</DateValue>
+						<DateTitle>ATÉ</DateTitle>
+						<DateValue>{rentalPeriod.endFormatted}</DateValue>
 					</DateInfo>
 				</RentalPeriod>
 
 				<RentalPrice>
 					<RentalPriceLabel>TOTAL</RentalPriceLabel>
 					<RentalPriceDetails>
-						<RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
-						<RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+						<RentalPriceQuota>R$ {car.rent.price} x{dates.length} diárias</RentalPriceQuota>
+						<RentalPriceTotal>R$ {rentalTotal}</RentalPriceTotal>
 					</RentalPriceDetails>
 				</RentalPrice>
 			</Content>
