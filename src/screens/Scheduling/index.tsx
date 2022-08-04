@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
+import { format } from 'date-fns';
+import { getPlatformDate } from '../../utils';
+
+import ArrowSvg from '../../assets/arrow.svg';
+
 import {
 	BackButton,
 	Button,
@@ -9,8 +15,6 @@ import {
 	generateInterval,
 	MarkedDatesProps,
 } from '../../components';
-
-import ArrowSvg from '../../assets/arrow.svg';
 
 import {
 	Container,
@@ -24,7 +28,13 @@ import {
 	Content,
 	Footer,
 } from './styles';
-import { StatusBar } from 'react-native';
+
+interface RentalPeriod {
+	start: number;
+	startFormatted: string;
+	end: number;
+	endFormatted: string;
+}
 
 export function Scheduling() {
 	const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>(
@@ -33,6 +43,10 @@ export function Scheduling() {
 	const [markedDates, setMarkedDates] = useState<MarkedDatesProps>(
 		{} as MarkedDatesProps
 	);
+	const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
+		{} as RentalPeriod
+	);
+
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 
@@ -51,7 +65,20 @@ export function Scheduling() {
 
 		setLastSelectedDate(end);
 		const interval = generateInterval(start, end);
-		setMarkedDates(interval)
+		setMarkedDates(interval);
+
+		setRentalPeriod({
+			start: start.timestamp,
+			end: end.timestamp,
+			startFormatted: format(
+				getPlatformDate(new Date(start.dateString)),
+				'dd/MM/yyyy'
+			),
+			endFormatted: format(
+				getPlatformDate(new Date(end.dateString)),
+				'dd/MM/yyyy'
+			),
+		});
 	}
 
 	return (
@@ -72,8 +99,8 @@ export function Scheduling() {
 				<RentalPeriod>
 					<DateInfo>
 						<DateTitle>DE</DateTitle>
-						<DateValueWrapper selected={false}>
-							<DateValue>18/06/2021</DateValue>
+						<DateValueWrapper selected={!!rentalPeriod.startFormatted}>
+							<DateValue>{rentalPeriod.startFormatted}</DateValue>
 						</DateValueWrapper>
 					</DateInfo>
 
@@ -81,8 +108,8 @@ export function Scheduling() {
 
 					<DateInfo>
 						<DateTitle>ATÉ</DateTitle>
-						<DateValueWrapper selected={false}>
-							<DateValue></DateValue>
+						<DateValueWrapper selected={!!rentalPeriod.endFormatted}>
+							<DateValue>{rentalPeriod.endFormatted}</DateValue>
 						</DateValueWrapper>
 					</DateInfo>
 				</RentalPeriod>
