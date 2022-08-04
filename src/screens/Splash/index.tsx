@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import BrandSvg from '../../assets/brand.svg';
 import LogoSvg from '../../assets/logo.svg';
+
+import { Container } from './styles';
 
 import Animated, {
 	useSharedValue,
@@ -10,11 +13,12 @@ import Animated, {
 	Easing,
 	interpolate,
 	Extrapolate,
+	runOnJS,
 } from 'react-native-reanimated';
 
-import { Container } from './styles';
-
 export function Splash() {
+	const navigation = useNavigation<any>();
+
 	const splashAnimation = useSharedValue(0);
 
 	const brandStyle = useAnimatedStyle(() => {
@@ -49,16 +53,23 @@ export function Splash() {
 		};
 	});
 
+	function startApp() {
+		navigation.navigate('Home');
+	}
+
 	useEffect(() => {
-		splashAnimation.value = withTiming(50, { duration: 1000 });
+		splashAnimation.value = withTiming(50, { duration: 2000 }, () => {
+			'worklet';
+			runOnJS(startApp)();
+		});
 	}, []);
 
 	return (
 		<Container>
-			<Animated.View style={[brandStyle, {position: 'absolute'}]}>
+			<Animated.View style={[brandStyle, { position: 'absolute' }]}>
 				<BrandSvg width={80} height={50} />
 			</Animated.View>
-			<Animated.View style={[logoStyle, {position: 'absolute'}]}>
+			<Animated.View style={[logoStyle, { position: 'absolute' }]}>
 				<LogoSvg width={180} height={20} />
 			</Animated.View>
 		</Container>
