@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StatusBar } from 'react-native';
 import { useTheme } from 'styled-components';
-import { BackButton, Car, Load } from '../../components';
+import { BackButton, Car, LoadAnimation } from '../../components';
 import { CarDTO } from '../../dtos/CarDTO';
 import { api } from '../../services/api';
 import { AntDesign } from '@expo/vector-icons';
@@ -65,7 +65,7 @@ export function MyCars() {
 			</Header>
 
 			{isLoading ? (
-				<Load />
+				<LoadAnimation />
 			) : (
 				<Content>
 					<Appointments>
