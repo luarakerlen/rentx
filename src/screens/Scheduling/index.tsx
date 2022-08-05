@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
@@ -13,6 +13,8 @@ import {
 	Calendar,
 	DayProps,
 	generateInterval,
+	generateUnavailableDates,
+	LoadAnimation,
 	MarkedDatesProps,
 } from '../../components';
 
@@ -29,6 +31,7 @@ import {
 	Footer,
 } from './styles';
 import { CarDTO } from '../../dtos/CarDTO';
+import { api } from '../../services/api';
 
 interface RentalPeriod {
 	startFormatted: string;
@@ -43,12 +46,19 @@ export function Scheduling() {
 	const route = useRoute();
 	const { car } = route.params as Params;
 
+	const [isLoading, setIsLoading] = useState(true);
+
+	const [unavailableMarkedDates, setUnavailableMarkedDates] =
+		useState<MarkedDatesProps>({} as MarkedDatesProps);
+
 	const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>(
 		{} as DayProps
 	);
+
 	const [markedDates, setMarkedDates] = useState<MarkedDatesProps>(
 		{} as MarkedDatesProps
 	);
+
 	const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
 		{} as RentalPeriod
 	);
@@ -88,6 +98,26 @@ export function Scheduling() {
 		});
 	}
 
+	useEffect(() => {
+		async function fetchUnavailableDates() {
+			try {
+				const response = await api.get(`/schedules_bycars/${car.id}`);
+
+				const unavailableDates = generateUnavailableDates(
+					response.data.unavailable_dates as string[]
+				);
+
+				setUnavailableMarkedDates(unavailableDates);
+			} catch (error) {
+				console.log('erro ao listar datas indisponíveis', error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		fetchUnavailableDates();
+	}, []);
+
 	return (
 		<Container>
 			<Header>
@@ -122,9 +152,16 @@ export function Scheduling() {
 				</RentalPeriod>
 			</Header>
 
-			<Content>
-				<Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
-			</Content>
+			{isLoading ? (
+				<LoadAnimation />
+			) : (
+				<Content>
+					<Calendar
+						markedDates={{ ...markedDates, ...unavailableMarkedDates }}
+						onDayPress={handleChangeDate}
+					/>
+				</Content>
+			)}
 
 			<Footer>
 				<Button

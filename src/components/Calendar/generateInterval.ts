@@ -4,28 +4,47 @@ import { getPlatformDate } from '../../utils';
 import theme from '../../styles/theme';
 
 export function generateInterval(start: DayProps, end: DayProps) {
-	let interval: MarkedDatesProps = {};
+  let interval: MarkedDatesProps = {};
 
-	eachDayOfInterval({
-		start: new Date(start.timestamp),
-		end: new Date(end.timestamp),
-	}).forEach((item) => {
-		const date = format(getPlatformDate(item), 'yyyy-MM-dd');
+  eachDayOfInterval({
+    start: new Date(start.timestamp),
+    end: new Date(end.timestamp),
+  }).forEach((item) => {
+    const date = format(getPlatformDate(item), 'yyyy-MM-dd');
 
-		interval = {
-			...interval,
-			[date]: {
-				color:
-					date === start.dateString || date === end.dateString
-						? theme.colors.main
-						: theme.colors.main_light,
-				textColor:
-					date === start.dateString || date === end.dateString
-						? theme.colors.main_light
-						: theme.colors.main,
-			},
-		};
-	});
+    interval = {
+      ...interval,
+      [date]: {
+        color:
+          date === start.dateString || date === end.dateString
+            ? theme.colors.main
+            : theme.colors.main_light,
+        textColor:
+          date === start.dateString || date === end.dateString
+            ? theme.colors.main_light
+            : theme.colors.main,
+      },
+    };
+  });
 
-	return interval;
+  return interval;
 }
+
+export function generateUnavailableDates(days: string[]) {
+  let unavailableDates: MarkedDatesProps = {};
+
+  days.forEach((item) => {
+    const date = format(getPlatformDate(new Date(item)), 'yyyy-MM-dd');
+
+    unavailableDates = {
+      ...unavailableDates,
+      [date]: {
+        disabled: true,
+        disableTouchEvent: true,
+      },
+    };
+  });
+
+  return unavailableDates;
+}
+

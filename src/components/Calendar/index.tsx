@@ -8,17 +8,17 @@ import {
 } from 'react-native-calendars';
 import { useTheme } from 'styled-components';
 import { ptBR } from './localeConfig';
-import { generateInterval } from './generateInterval';
+import { generateInterval, generateUnavailableDates } from './generateInterval';
 
 LocaleConfig.locales['pt-br'] = ptBR;
 LocaleConfig.defaultLocale = 'pt-br';
 
 interface MarkedDatesProps {
 	[date: string]: {
-		color: string;
-		textColor: string;
+		color?: string;
+		textColor?: string;
 		disabled?: boolean;
-		disabledTouchEvent?: boolean;
+		disableTouchEvent?: boolean;
 	};
 }
 
@@ -73,4 +73,10 @@ function Calendar({ markedDates, onDayPress }: CalendarProps) {
 	);
 }
 
-export { Calendar, MarkedDatesProps, DayProps, generateInterval };
+export {
+	Calendar,
+	MarkedDatesProps,
+	DayProps,
+	generateInterval,
+	generateUnavailableDates,
+};
