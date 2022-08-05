@@ -85,12 +85,11 @@ export function CarDetails() {
 				<Header>
 					<BackButton />
 				</Header>
-
-				<Animated.View style={[sliderCarsStyleAnimation]}>
-					<CarImages>
+				<CarImages>
+					<Animated.View style={[sliderCarsStyleAnimation]}>
 						<ImageSlider imagesUrl={car.photos} />
-					</CarImages>
-				</Animated.View>
+					</Animated.View>
+				</CarImages>
 			</Animated.View>
 
 			<Animated.ScrollView
