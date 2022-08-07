@@ -1,11 +1,14 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
+	Alert,
 	Keyboard,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from 'styled-components';
+import * as Yup from 'yup';
+
 import { BackButton, Bullet, Button, PasswordInput } from '../../../components';
 
 import {
@@ -18,9 +21,37 @@ import {
 	Title,
 } from './styles';
 
+interface Params {
+	user: {
+		name: string;
+		email: string;
+		driverLicense: string;
+	};
+}
+
 export function SignUpSecondStep() {
+	const [password, setPassword] = useState('');
+	const [passwordConfirm, setPasswordConfirm] = useState('');
+
 	const theme = useTheme();
-	const navigation = useNavigation()
+	const navigation = useNavigation();
+	const route = useRoute();
+
+	const { user } = route.params as Params;
+
+	function handleRegister() {
+		if(!password || !passwordConfirm) {
+			return Alert.alert('Opa!', 'Informe a senha e a confirmação')
+		}
+
+		if(password !== passwordConfirm) {
+			return Alert.alert('Opa!', 'As senhas devem ser iguais')
+		}
+
+		//Enviar para a api e cadastrar
+
+		//Enviar para a confirmação de cadastro
+	}
 
 	return (
 		<KeyboardAvoidingView behavior='position' enabled>
@@ -45,11 +76,25 @@ export function SignUpSecondStep() {
 
 					<Form>
 						<FormTitle>2. Senha</FormTitle>
-						<PasswordInput iconName='lock' placeholder='Senha' />
-						<PasswordInput iconName='lock' placeholder='Repetir senha' />
+						<PasswordInput
+							iconName='lock'
+							placeholder='Senha'
+							onChangeText={setPassword}
+							value={password}
+						/>
+						<PasswordInput
+							iconName='lock'
+							placeholder='Repetir senha'
+							onChangeText={setPasswordConfirm}
+							value={passwordConfirm}
+						/>
 					</Form>
 
-					<Button title='Cadastrar' color={theme.colors.success} />
+					<Button
+						title='Cadastrar'
+						color={theme.colors.success}
+						onPress={handleRegister}
+					/>
 				</Container>
 			</TouchableWithoutFeedback>
 		</KeyboardAvoidingView>

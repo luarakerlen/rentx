@@ -23,10 +23,10 @@ export function SignIn() {
 	async function handleSignIn() {
 		try {
 			const schema = Yup.object().shape({
-				email: Yup.string()
-					.required('E-mail obrigatório')
-					.email('Digite um e-mail válido'),
 				password: Yup.string().required('A senha é obrigatória'),
+				email: Yup.string()
+					.required('E-mail obrigatório!')
+					.email('Digite um e-mail válido'),
 			});
 
 			await schema.validate({ email, password });
@@ -44,7 +44,7 @@ export function SignIn() {
 	}
 
 	function handleNewAccount() {
-		navigation.navigate('SignUpFirstStep')
+		navigation.navigate('SignUpFirstStep');
 	}
 
 	return (
