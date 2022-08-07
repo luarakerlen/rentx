@@ -15,7 +15,6 @@ interface Props extends RectButtonProps {
 export function Button({
 	title,
 	color,
-	onPress,
 	enabled = true,
 	isLoading = false,
 	light = false,
