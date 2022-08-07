@@ -8,7 +8,6 @@ import { Container, Title } from './styles';
 interface Props extends RectButtonProps {
 	title: string;
 	color?: string;
-	enabled?: boolean;
 	isLoading?: boolean;
 	light?: boolean;
 }
@@ -16,6 +15,7 @@ interface Props extends RectButtonProps {
 export function Button({
 	title,
 	color,
+	onPress,
 	enabled = true,
 	isLoading = false,
 	light = false,
