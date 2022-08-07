@@ -10,6 +10,7 @@ import {
 	SchedulingDetails,
 	SignIn,
 	SignUpFirstStep,
+	SignUpSecondStep,
 	Splash,
 } from '../screens';
 
@@ -25,6 +26,7 @@ export function StackRoutes() {
 		>
 			<Screen name='SignIn' component={SignIn} />
 			<Screen name='SignUpFirstStep' component={SignUpFirstStep} />
+			<Screen name='SignUpSecondStep' component={SignUpSecondStep} />
 			<Screen
 				name='Home'
 				component={Home}

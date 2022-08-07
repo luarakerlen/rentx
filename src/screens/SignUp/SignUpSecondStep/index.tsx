@@ -5,7 +5,8 @@ import {
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 } from 'react-native';
-import { BackButton, Bullet, Button, Input } from '../../../components';
+import { useTheme } from 'styled-components';
+import { BackButton, Bullet, Button, PasswordInput } from '../../../components';
 
 import {
 	Container,
@@ -17,12 +18,9 @@ import {
 	Title,
 } from './styles';
 
-export function SignUpFirstStep() {
-	const navigation = useNavigation<any>();
-
-	function handleNextStep() {
-		navigation.navigate('SignUpSecondStep')
-	}
+export function SignUpSecondStep() {
+	const theme = useTheme();
+	const navigation = useNavigation()
 
 	return (
 		<KeyboardAvoidingView behavior='position' enabled>
@@ -46,21 +44,12 @@ export function SignUpFirstStep() {
 					</Subtitle>
 
 					<Form>
-						<FormTitle>1. Dados</FormTitle>
-						<Input iconName='user' placeholder='Nome' />
-						<Input
-							iconName='mail'
-							placeholder='E-mail'
-							keyboardType='email-address'
-						/>
-						<Input
-							iconName='credit-card'
-							placeholder='CNH'
-							keyboardType='numeric'
-						/>
+						<FormTitle>2. Senha</FormTitle>
+						<PasswordInput iconName='lock' placeholder='Senha' />
+						<PasswordInput iconName='lock' placeholder='Repetir senha' />
 					</Form>
 
-					<Button title='Próximo' onPress={handleNextStep}/>
+					<Button title='Cadastrar' color={theme.colors.success} />
 				</Container>
 			</TouchableWithoutFeedback>
 		</KeyboardAvoidingView>
