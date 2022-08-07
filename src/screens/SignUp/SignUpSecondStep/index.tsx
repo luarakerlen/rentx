@@ -34,23 +34,27 @@ export function SignUpSecondStep() {
 	const [passwordConfirm, setPasswordConfirm] = useState('');
 
 	const theme = useTheme();
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 	const route = useRoute();
 
 	const { user } = route.params as Params;
 
 	function handleRegister() {
-		if(!password || !passwordConfirm) {
-			return Alert.alert('Opa!', 'Informe a senha e a confirmação')
+		if (!password || !passwordConfirm) {
+			return Alert.alert('Opa!', 'Informe a senha e a confirmação');
 		}
 
-		if(password !== passwordConfirm) {
-			return Alert.alert('Opa!', 'As senhas devem ser iguais')
+		if (password !== passwordConfirm) {
+			return Alert.alert('Opa!', 'As senhas devem ser iguais');
 		}
 
 		//Enviar para a api e cadastrar
 
-		//Enviar para a confirmação de cadastro
+		navigation.navigate('Confirmation', {
+			title: 'Conta criada!',
+			message: `Agora é só fazer login\ne aproveitar.`,
+			nextScreenRoute: 'SignIn',
+		});
 	}
 
 	return (
