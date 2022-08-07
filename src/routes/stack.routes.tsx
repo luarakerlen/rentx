@@ -6,7 +6,7 @@ import {
 	Home,
 	MyCars,
 	Scheduling,
-	SchedulingComplete,
+	Confirmation,
 	SchedulingDetails,
 	SignIn,
 	SignUpFirstStep,
@@ -37,7 +37,7 @@ export function StackRoutes() {
 			<Screen name='CarDetails' component={CarDetails} />
 			<Screen name='Scheduling' component={Scheduling} />
 			<Screen name='SchedulingDetails' component={SchedulingDetails} />
-			<Screen name='SchedulingComplete' component={SchedulingComplete} />
+			<Screen name='Confirmation' component={Confirmation} />
 			<Screen name='MyCars' component={MyCars} />
 		</Navigator>
 	);

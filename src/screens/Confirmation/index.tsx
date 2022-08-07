@@ -8,7 +8,7 @@ import DoneSvg from '../../assets/done.svg';
 import { Container, Content, Title, Message, Footer } from './styles';
 import { ConfirmButton } from '../../components';
 
-export function SchedulingComplete() {
+export function Confirmation() {
 	const { width } = useWindowDimensions();
 	const navigation = useNavigation<any>();
 
