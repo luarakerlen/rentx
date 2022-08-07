@@ -9,6 +9,7 @@ import {
 	SchedulingComplete,
 	SchedulingDetails,
 	SignIn,
+	SignUpFirstStep,
 	Splash,
 } from '../screens';
 
@@ -20,8 +21,9 @@ export function StackRoutes() {
 			screenOptions={{
 				headerShown: false,
 			}}
-			initialRouteName='SignIn'
+			initialRouteName='SignUpFirstStep'
 		>
+			<Screen name='SignUpFirstStep' component={SignUpFirstStep} />
 			<Screen name='SignIn' component={SignIn} />
 			<Screen
 				name='Home'
