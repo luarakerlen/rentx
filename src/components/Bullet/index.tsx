@@ -3,9 +3,9 @@ import React from 'react';
 import { Container } from './styles';
 
 interface Props {
-	active: boolean;
+	active?: boolean;
 }
 
-export function Bullet({ active }: Props) {
+export function Bullet({ active = false }: Props) {
 	return <Container active={active}></Container>;
 }
