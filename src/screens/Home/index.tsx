@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, BackHandler } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Ionicons } from '@expo/vector-icons';
-import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
 
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	useAnimatedGestureHandler,
-	withSpring,
-} from 'react-native-reanimated';
+// import Animated, {
+// 	useAnimatedStyle,
+// 	useSharedValue,
+// 	useAnimatedGestureHandler,
+// 	withSpring,
+// } from 'react-native-reanimated';
 
-const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
+// const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
 import { api } from '../../services/api';
 import Logo from '../../assets/logo.svg';
@@ -20,51 +18,50 @@ import { Car, LoadAnimation } from '../../components';
 
 import { CarList, Container, Header, HeaderContent, TotalCars } from './styles';
 import { CarDTO } from '../../dtos/CarDTO';
-import { useTheme } from 'styled-components';
 
 export function Home() {
-	const theme = useTheme();
-
 	const [cars, setCars] = useState<CarDTO[]>([] as CarDTO[]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const navigation = useNavigation<any>();
 
-	const positionY = useSharedValue(0);
-	const positionX = useSharedValue(0);
+	// const theme = useTheme();
 
-	const myCarsButtonStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{ translateX: positionX.value },
-				{ translateY: positionY.value },
-			],
-		};
-	});
+	// const positionY = useSharedValue(0);
+	// const positionX = useSharedValue(0);
 
-	const onGestureEvent = useAnimatedGestureHandler({
-		onStart(_, ctx: any) {
-			ctx.positionX = positionX.value;
-			ctx.positionY = positionY.value;
-		},
+	// const myCarsButtonStyle = useAnimatedStyle(() => {
+	// 	return {
+	// 		transform: [
+	// 			{ translateX: positionX.value },
+	// 			{ translateY: positionY.value },
+	// 		],
+	// 	};
+	// });
 
-		onActive(event, ctx: any) {
-			positionX.value = ctx.positionX + event.translationX;
-			positionY.value = ctx.positionY + event.translationY;
-		},
+	// const onGestureEvent = useAnimatedGestureHandler({
+	// 	onStart(_, ctx: any) {
+	// 		ctx.positionX = positionX.value;
+	// 		ctx.positionY = positionY.value;
+	// 	},
 
-		onEnd() {
-			positionX.value = withSpring(0);
-			positionY.value = withSpring(0);
-		},
-	});
+	// 	onActive(event, ctx: any) {
+	// 		positionX.value = ctx.positionX + event.translationX;
+	// 		positionY.value = ctx.positionY + event.translationY;
+	// 	},
+
+	// 	onEnd() {
+	// 		positionX.value = withSpring(0);
+	// 		positionY.value = withSpring(0);
+	// 	},
+	// });
+
+	// function handleOpenMyCars() {
+	// 	navigation.navigate('MyCars');
+	// }
 
 	function handleCarDetails(car: CarDTO) {
 		navigation.navigate('CarDetails', { car });
-	}
-
-	function handleOpenMyCars() {
-		navigation.navigate('MyCars');
 	}
 
 	useEffect(() => {
@@ -80,12 +77,6 @@ export function Home() {
 		}
 
 		fetchCars();
-	}, []);
-
-	useEffect(() => {
-		BackHandler.addEventListener('hardwareBackPress', () => {
-			return true;
-		});
 	}, []);
 
 	return (
@@ -115,7 +106,8 @@ export function Home() {
 				/>
 			)}
 
-			<PanGestureHandler onGestureEvent={onGestureEvent}>
+			{/* BOTÃO FLUTUANTE ANIMADO */}
+			{/* <PanGestureHandler onGestureEvent={onGestureEvent}>
 				<Animated.View
 					style={[
 						myCarsButtonStyle,
@@ -137,7 +129,7 @@ export function Home() {
 						/>
 					</ButtonAnimated>
 				</Animated.View>
-			</PanGestureHandler>
+			</PanGestureHandler> */}
 		</Container>
 	);
 }

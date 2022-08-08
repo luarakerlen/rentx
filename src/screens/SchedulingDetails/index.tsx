@@ -35,7 +35,7 @@ import {
 	RentalPriceQuota,
 	RentalPriceTotal,
 } from './styles';
-import { Alert } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 
 interface RentalPeriod {
 	startFormatted: string;
@@ -108,6 +108,11 @@ export function SchedulingDetails() {
 
 	return (
 		<Container>
+			<StatusBar
+				barStyle='dark-content'
+				backgroundColor='transparent'
+				translucent
+			/>
 			<Header>
 				<BackButton />
 			</Header>
