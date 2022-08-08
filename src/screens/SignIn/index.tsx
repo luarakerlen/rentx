@@ -10,6 +10,7 @@ import {
 import { useTheme } from 'styled-components';
 import * as Yup from 'yup';
 import { Button, Input, PasswordInput } from '../../components';
+import { useAuth } from '../../hooks/auth';
 
 import { Container, Footer, Form, Header, SubTitle, Title } from './styles';
 
@@ -19,6 +20,7 @@ export function SignIn() {
 	const [password, setPassword] = useState('');
 
 	const navigation = useNavigation<any>();
+	const { signIn } = useAuth();
 
 	async function handleSignIn() {
 		try {
@@ -30,7 +32,8 @@ export function SignIn() {
 			});
 
 			await schema.validate({ email, password });
-			//Fazer login
+
+			signIn({ email, password });
 		} catch (error) {
 			if (error instanceof Yup.ValidationError) {
 				Alert.alert('Opa', error.message);
