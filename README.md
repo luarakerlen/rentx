@@ -5,7 +5,7 @@
 Faça o download do backend:
 https://github.com/luarakerlen/rentx-api
 
-Rode os comandos
+Rode os seguintes comandos:
 ```
 yarn i
 ```
