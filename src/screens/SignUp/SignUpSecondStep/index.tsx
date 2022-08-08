@@ -7,9 +7,9 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from 'styled-components';
-import * as Yup from 'yup';
 
 import { BackButton, Bullet, Button, PasswordInput } from '../../../components';
+import { api } from '../../../services/api';
 
 import {
 	Container,
@@ -39,7 +39,7 @@ export function SignUpSecondStep() {
 
 	const { user } = route.params as Params;
 
-	function handleRegister() {
+	async function handleRegister() {
 		if (!password || !passwordConfirm) {
 			return Alert.alert('Opa!', 'Informe a senha e a confirmação');
 		}
@@ -48,13 +48,23 @@ export function SignUpSecondStep() {
 			return Alert.alert('Opa!', 'As senhas devem ser iguais');
 		}
 
-		//Enviar para a api e cadastrar
-
-		navigation.navigate('Confirmation', {
-			title: 'Conta criada!',
-			message: `Agora é só fazer login\ne aproveitar.`,
-			nextScreenRoute: 'SignIn',
-		});
+		await api
+			.post('/users', {
+				name: user.name,
+				email: user.email,
+				driver_license: user.driverLicense,
+				password,
+			})
+			.then(() => {
+				navigation.navigate('Confirmation', {
+					title: 'Conta criada!',
+					message: `Agora é só fazer login\ne aproveitar.`,
+					nextScreenRoute: 'SignIn',
+				});
+			})
+			.catch(() => {
+				Alert.alert('Opa!', 'Não foi possível cadastrar');
+			});
 	}
 
 	return (
