@@ -6,7 +6,7 @@ import HomeSvg from '../assets/home.svg';
 import CarSvg from '../assets/car.svg';
 import PeopleSvg from '../assets/people.svg';
 
-import { MyCars } from '../screens';
+import { MyCars, Profile } from '../screens';
 import { AppStackRoutes } from './app.stack.routes';
 import { useTheme } from 'styled-components';
 
@@ -47,13 +47,15 @@ export function AppTabRoutes() {
 					),
 				}}
 			/>
-			{/* <Screen
+			<Screen
 				name='Profile'
 				component={Profile}
 				options={{
-					tabBarIcon: ({ color }) => <PeopleSvg width={24} height={24} fill={color} />,
+					tabBarIcon: ({ color }) => (
+						<PeopleSvg width={24} height={24} fill={color} />
+					),
 				}}
-			/> */}
+			/>
 		</Navigator>
 	);
 }
