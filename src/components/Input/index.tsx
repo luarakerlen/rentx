@@ -36,10 +36,10 @@ export function Input({ iconName, value, ...rest }: Props) {
 				/>
 			</IconContainer>
 			<InputText
-				{...rest}
 				onFocus={handleInputFocus}
 				onBlur={handleInputBluer}
 				isFocused={isFocused}
+				{...rest}
 			/>
 		</Container>
 	);
