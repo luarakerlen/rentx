@@ -6,6 +6,7 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '../../hooks/auth';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
@@ -33,11 +34,31 @@ export function Profile() {
 	const { user } = useAuth();
 
 	const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
+	const [name, setName] = useState(user.name);
+	const [avatar, setAvatar] = useState(user.avatar);
+	const [driverLicense, setDriverLicense] = useState(user.driver_license);
 
 	function handleLogout() {}
 
 	function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
 		setOption(optionSelected);
+	}
+
+	async function handleAvatarSelect() {
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [4, 4],
+			quality: 1,
+		});
+
+		if (result.cancelled) {
+			return;
+		}
+
+		if (result.uri) {
+			setAvatar(result.uri);
+		}
 	}
 
 	return (
@@ -59,12 +80,14 @@ export function Profile() {
 						</HeaderTop>
 
 						<PhotoContainer>
-							<Photo
-								source={{
-									uri: 'https://avatars.githubusercontent.com/u/26902816?v=4',
-								}}
-							/>
-							<PhotoButton onPress={() => {}}>
+							{!!avatar && (
+								<Photo
+									source={{
+										uri: avatar,
+									}}
+								/>
+							)}
+							<PhotoButton onPress={handleAvatarSelect}>
 								<Feather name='camera' size={24} color={theme.colors.shape} />
 							</PhotoButton>
 						</PhotoContainer>
@@ -100,6 +123,7 @@ export function Profile() {
 									autoCapitalize='words'
 									autoCorrect={false}
 									defaultValue={user.name}
+									onChangeText={setName}
 								/>
 								<Input
 									iconName='mail'
@@ -111,6 +135,7 @@ export function Profile() {
 									placeholder='CNH'
 									keyboardType='numeric'
 									defaultValue={user.driver_license}
+									onChangeText={setDriverLicense}
 								/>
 							</Section>
 						) : (
