@@ -26,7 +26,8 @@ interface SignInCredentials {
 
 interface AuthContextData {
 	user: User;
-	signIn: (credencials: SignInCredentials) => Promise<void>;
+	signIn: (credentials: SignInCredentials) => Promise<void>;
+	signOut: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -50,17 +51,31 @@ function AuthProvider({ children }: AuthProviderProps) {
 
 			const userCollection = database.get<ModelUser>('users');
 			await database.write(async () => {
-				await userCollection.create((newUser) => {
-					newUser.user_id = user.id;
-					newUser.name = user.name;
-					newUser.email = user.email;
-					newUser.driver_license = user.driver_license;
-					newUser.avatar = user.avatar;
-					newUser.token = token;
+				const dataUser = await userCollection.create((newUser) => {
+					(newUser.user_id = user.id),
+						(newUser.name = user.name),
+						(newUser.email = user.email),
+						(newUser.driver_license = user.driver_license),
+						(newUser.avatar = user.avatar),
+						(newUser.token = token);
 				});
-			});
 
-			setData({ ...user, token });
+				const userData = dataUser._raw as unknown as User;
+				setData(userData);
+			});
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async function signOut() {
+		try {
+			const userCollection = database.get<ModelUser>('users');
+			await database.write(async () => {
+				const userSelected = await userCollection.find(data.id);
+				await userSelected.destroyPermanently();
+			});
+			setData({} as User);
 		} catch (error) {
 			throw error;
 		}
@@ -88,6 +103,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 			value={{
 				user: data,
 				signIn,
+				signOut,
 			}}
 		>
 			{children}
