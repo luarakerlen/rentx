@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import {
+	Alert,
 	Keyboard,
 	KeyboardAvoidingView,
 	StatusBar,
 	TouchableWithoutFeedback,
 } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import * as Yup from 'yup';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '../../hooks/auth';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
 
-import { BackButton, Input, PasswordInput } from '../../components';
+import { BackButton, Button, Input, PasswordInput } from '../../components';
 
 import {
 	Container,
@@ -31,7 +33,7 @@ import {
 
 export function Profile() {
 	const theme = useTheme();
-	const { user, signOut } = useAuth();
+	const { user, signOut, updateUser } = useAuth();
 
 	const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
 	const [name, setName] = useState(user.name);
@@ -56,6 +58,36 @@ export function Profile() {
 
 		if (result.uri) {
 			setAvatar(result.uri);
+		}
+	}
+
+	async function handleProfileUpdate() {
+		try {
+			const schema = Yup.object().shape({
+				driverLicense: Yup.string().required('A CNH é obrigatória'),
+				name: Yup.string().required('O nome é obrigatório'),
+			});
+
+			const data = { name, driverLicense };
+			await schema.validate(data);
+
+			await updateUser({
+				id: user.id,
+				user_id: user.user_id,
+				email: user.email,
+				name,
+				driver_license: driverLicense,
+				avatar,
+				token: user.token,
+			});
+
+			Alert.alert('Atualizar perfil', 'Perfil atualizado');
+		} catch (error) {
+			if (error instanceof Yup.ValidationError) {
+				Alert.alert('Opa!', error.message);
+			} else {
+				Alert.alert('Atualizar perfil', 'Não foi possível atualizar o perfil');
+			}
 		}
 	}
 
@@ -143,6 +175,8 @@ export function Profile() {
 								<PasswordInput iconName='lock' placeholder='Repetir senha' />
 							</Section>
 						)}
+
+						<Button title='Salvar alterações' onPress={handleProfileUpdate} />
 					</Content>
 				</Container>
 			</TouchableWithoutFeedback>
