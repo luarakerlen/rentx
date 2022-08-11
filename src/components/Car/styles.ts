@@ -1,3 +1,4 @@
+import FastImage from 'react-native-fast-image';
 import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
@@ -53,7 +54,7 @@ export const Price = styled.Text`
 
 export const Type = styled.View``;
 
-export const CarImage = styled.Image`
+export const CarImage = styled(FastImage)`
   width: 167px;
   height: 85px;
 `;
