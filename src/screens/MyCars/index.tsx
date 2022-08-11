@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StatusBar } from 'react-native';
 import { useTheme } from 'styled-components';
 import { BackButton, Car, LoadAnimation } from '../../components';
-import { CarDTO } from '../../dtos/CarDTO';
 import { api } from '../../services/api';
 import { AntDesign } from '@expo/vector-icons';
 import { Car as ModelCar } from '../../database/model/car';
@@ -23,7 +22,7 @@ import {
 	CarFooterDate,
 } from './styles';
 import { format, parseISO } from 'date-fns';
-import { DateSchema } from 'yup';
+import { useIsFocused } from '@react-navigation/native';
 
 interface DataProps {
 	id: string;
@@ -34,6 +33,7 @@ interface DataProps {
 
 export function MyCars() {
 	const theme = useTheme();
+	const screenIsFocus = useIsFocused();
 
 	const [appointments, setAppointments] = useState<DataProps[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +60,7 @@ export function MyCars() {
 		}
 
 		fetchCars();
-	}, []);
+	}, [screenIsFocus]);
 
 	return (
 		<Container>
