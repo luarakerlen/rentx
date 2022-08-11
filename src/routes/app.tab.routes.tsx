@@ -30,7 +30,7 @@ export function AppTabRoutes() {
 			}}
 		>
 			<Screen
-				name='AppStackRoutes'
+				name='Home'
 				component={AppStackRoutes}
 				options={{
 					tabBarIcon: ({ color }) => (
