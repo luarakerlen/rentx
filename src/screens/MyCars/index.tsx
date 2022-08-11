@@ -5,6 +5,7 @@ import { BackButton, Car, LoadAnimation } from '../../components';
 import { CarDTO } from '../../dtos/CarDTO';
 import { api } from '../../services/api';
 import { AntDesign } from '@expo/vector-icons';
+import { Car as ModelCar } from '../../database/model/car';
 
 import {
 	Container,
@@ -21,11 +22,12 @@ import {
 	CarFooterPeriod,
 	CarFooterDate,
 } from './styles';
+import { format, parseISO } from 'date-fns';
+import { DateSchema } from 'yup';
 
-interface AppointmentsProps {
+interface DataProps {
 	id: string;
-	user_is: string;
-	car: CarDTO;
+	car: ModelCar;
 	start_date: string;
 	end_date: string;
 }
@@ -33,14 +35,23 @@ interface AppointmentsProps {
 export function MyCars() {
 	const theme = useTheme();
 
-	const [appointments, setAppointments] = useState<AppointmentsProps[]>([]);
+	const [appointments, setAppointments] = useState<DataProps[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		async function fetchCars() {
 			try {
-				const response = await api.get(`/schedules_byuser?user_id=1`);
-				setAppointments(response.data);
+				const response = await api.get(`rentals`);
+				const dataFormatted = response.data.map((data: DataProps) => {
+					return {
+						id: data.id,
+						car: data.car,
+						start_date: format(parseISO(data.start_date), 'dd/MM/yyyy'),
+						end_date: format(parseISO(data.end_date), 'dd/MM/yyyy'),
+					};
+				});
+
+				setAppointments(dataFormatted);
 			} catch (error) {
 				console.log('erro ao listar agendamentos', error);
 			} finally {
