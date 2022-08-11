@@ -31,6 +31,7 @@ import {
 	Accessories,
 	Footer,
 	CarImages,
+	OfflineInfo,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { api } from '../../services/api';
@@ -151,9 +152,6 @@ export function CarDetails() {
 				)}
 				<About>
 					{car.about}
-					{car.about}
-					{car.about}
-					{car.about}
 				</About>
 			</Animated.ScrollView>
 
@@ -163,6 +161,11 @@ export function CarDetails() {
 					onPress={handleChangeRentalPeriod}
 					enabled={netInfo.isConnected === true}
 				/>
+				{netInfo.isConnected === false && (
+					<OfflineInfo>
+						Conecte-se a Internet para ver mais detalhes e agendar seu carro.
+					</OfflineInfo>
+				)}
 			</Footer>
 		</Container>
 	);
