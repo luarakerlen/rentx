@@ -1,7 +1,7 @@
 # rentx
 [WIP] Projeto desenvolvido durante parte do curso de React Native da Rocketseat.
 
-## Antes de usar, ode o backend do projeto
+## Antes de usar, rode o backend do projeto
 Faça o download do backend:
 https://github.com/luarakerlen/rentx-api
 
